@@ -93,7 +93,7 @@ email_field = driver.find_element_by_name('login').click()
 
 if os.path.isfile('state.pkl'):
     print('resuming processing')
-    (book, edges, queue, processed) = pickle.load(open("state.pkl", "rb"))
+    (book, edges, queue, processed, my_id) = pickle.load(open("state.pkl", "rb"))
     print('book:', len(book))
     print('edges:', len(edges))
     print('queue:', len(queue))
@@ -104,7 +104,7 @@ else:
     queue = [id for (id, name) in friends]
     processed = [my_id]
     edges = [(my_id, friend_id) for (friend_id, friend_name) in friends]
-    pickle.dump((book, edges, queue, processed), open("state.pkl", "wb"))
+    pickle.dump((book, edges, queue, processed, my_id), open("state.pkl", "wb"))
 
 output_pattern = "{0:>27s}, {1:>20s}, {2:>4d}, {3:>4d}, {4:>4d}, {5:>4d}"
 print(output_pattern.replace("d", "s")
@@ -122,7 +122,7 @@ while len(queue) > 0:
     book.update(dict(friends))
     edges = edges + [(id, friend_id) for (friend_id, friend_name) in friends if friend_id not in processed]
     processed = processed + [id]
-    pickle.dump((book, edges, queue, processed), open("state.pkl", "wb"))
+    pickle.dump((book, edges, queue, processed, my_id), open("state.pkl", "wb"))
 
     print(output_pattern.format(
         str(datetime.datetime.now()),
